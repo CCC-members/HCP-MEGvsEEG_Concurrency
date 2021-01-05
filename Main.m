@@ -5,34 +5,69 @@ close all;
 clc 
 tic
 
+%%
+disp('-->> Starting process');
+disp("=====================================================================");
+
+addpath('app');
+app_properties = jsondecode(fileread(strcat('app_properties.json')));
+
+%% Printing data information
+app_properties = jsondecode(fileread(strcat('app_properties.json')));
+disp(strcat("-->> Name:",app_properties.generals.name));
+disp(strcat("-->> Version:",app_properties.generals.version));
+disp(strcat("-->> Version date:",app_properties.generals.version_date));
+disp("=====================================================================");
+
+%%
 paths                           = struct;
-paths.fieldtrip_path            = '/home/ariosky/fieldtrip-master';
-paths.brainstorm_path           = '/home/ariosky/brainstorm3';
-paths.protocols_path            = '/data3_260T/data/CCLAB_DATASETS/HCP-GUSHI-2019/Run_1/Protocols_EEG_projected_corrected/';
-paths.data_path                 = '/data3_260T/data/CCLAB_DATASETS/HCP-GUSHI-2019/Selected_data/';
-paths.output_path               = [pwd '/EEGvsMEG_Concurrency_Output'];
+paths.fieldtrip_path            = app_properties.fieldtrip.base_path;
+paths.brainstorm_path           = app_properties.brainstorm.base_path;
+paths.protocols_path            = app_properties.bst_protocols.base_path;
+paths.data_path                 = app_properties.preprocessed_data.base_path;
+paths.output_path               = app_properties.output_path.base_path;
 paths.common_functions          = 'common_functions';
+paths.functions                 = 'functions';
 paths.simulation_data           = 'simulation_data';
 paths.concurrency_evaluation    = 'concurrency_evaluation';
 paths.tools                     = 'tools';
 
 addpath(paths.common_functions);
+addpath(paths.functions);
 addpath(paths.simulation_data);
 addpath(genpath(paths.tools));
 addpath(paths.concurrency_evaluation);
 addpath(genpath(paths.brainstorm_path));
 addpath(genpath('TrafficToolBox'));
 
+%% checking paths
+if(~isfolder(paths.fieldtrip_path))
+   return; 
+end
+if(~isfolder(paths.brainstorm_path))
+   return; 
+end
+if(~isfolder(paths.bst_protocols))
+   return; 
+end
+if(~isfolder(paths.preprocessed_data))
+   return; 
+end
+if(~isfolder(paths.output_path))
+   mkdir(paths.output_path); 
+end
 addpath(paths.fieldtrip_path);
 
 ft_defaults
 
 protocols = dir(paths.protocols_path);
-for i=3:3 %length(protocols)
+protocols(ismember( {protocols.name}, {'.', '..'})) = [];  %remove . and ..
+for i=1:length(protocols)
    protocol = protocols(i);
    disp(strcat("-->> Processing protocol: ", protocol.name))
    subjects = dir(fullfile(protocol.folder,protocol.name,'anat'));
-   for j=4:length(subjects)-1-1
+   subjects(ismember( {subjects.name}, {'.', '..', '@default_subject'})) = [];  %remove . and ..
+   for j=1:length(subjects)-1-1
       subject = subjects(j);
       disp(strcat("-->> Processing subject: ", subject.name));
       SubID = subject.name;      
@@ -47,8 +82,10 @@ disp(strcat("<<-- Process finished -->>"));
 % disp(strcat("<<-- Selecting results -->>"));
 % 
 % subjects = dir('/data3_260T/data/CCLAB_DATASETS/HCP-GUSHI-2019/Run_1/EEGvsMEG_Concurrency_Output/');
-% subjects(ismember( {subjects.name}, {'.', '..','Tensors'})) = [];  %remove . and ..
+% subjects(ismember( {subjects.name}, {'.', '..'})) = [];  %remove . and ..
 % 
+% mkdir(fullfile(paths.output_path,'Tensors'));
+%
 % time_freq3D = struct;
 % time_freq3D.eLORETA.cor3D = zeros(8002,5,length(subjects));
 % time_freq3D.eLORETA.pvc3D = zeros(8002,5,length(subjects));
@@ -424,10 +461,18 @@ disp(strcat("<<-- Process finished -->>"));
 % end
 % disp('-->> Saving time_freq file');
 % %save('/data3_260T/data/CCLAB_DATASETS/HCP-GUSHI-1019/EEGvsMEG_Concurrency_Output/Tensors/time_freq3D.mat','time_freq3D','-v7.3');
-% save(fullfile(pwd,'Tensors/time_freq3D.mat'),'time_freq3D','-v7.3');
+% save(fullfile(paths.output_path,'Tensors/time_freq3D.mat'),'time_freq3D','-v7.3');
 % 
 % disp('-->> Saving space_freq file');
 % %save('/data3_260T/data/CCLAB_DATASETS/HCP-GUSHI-1019/EEGvsMEG_Concurrency_Output/Tensors/space_freq3D.mat','space_freq3D','-v7.3');
-% save(fullfile(pwd,'Tensors/space_freq3D.mat'),'space_freq3D','-v7.3');
+% save(fullfile(paths.output_path,'Tensors/space_freq3D.mat'),'space_freq3D','-v7.3');
 
-disp(strcat("<<-- Process finished -->>"));
+
+hours = fix(toc/3600);
+minutes = fix(mod(toc,3600)/60);
+disp(strcat("Elapsed time: ", num2str(hours) , " hours with ", num2str(minutes) , " minutes." ));
+disp('=====================================================================');
+disp(app_properties.generals.name);
+disp('=====================================================================');
+
+
