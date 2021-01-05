@@ -1,0 +1,45 @@
+{
+	"generals" : {
+		"name" : "HCP-MEGvsEEG_Concurrency",
+		"version" : "v.9",
+		"version_date" : "01-05-2021",
+		"version_number" : 9,
+        "test_data_url": "",
+		"url_check" : "",
+        "base_url"  : "https://codeload.github.com/CCC-members/HCP-MEGvsEEG_Concurrency/zip/master"        
+        },   
+	"externals" : {
+        "description":"No needed",
+		"name" : "",
+		"url" : ""
+		},
+    "matlab_runtime": {
+         "description":"Do not change",
+         "mac":"http://ssd.mathworks.com/supportfiles/downloads/R2018b/deployment_files/R2018b/installers/maci64/MCR_R2018b_maci64_installer.dmg.zip",
+         "win":"http://ssd.mathworks.com/supportfiles/downloads/R2018b/deployment_files/R2018b/installers/win64/MCR_R2018b_win64_installer.exe",
+         "linux":"http://ssd.mathworks.com/supportfiles/downloads/R2018b/deployment_files/R2018b/installers/glnxa64/MCR_R2018b_glnxa64_installer.zip"
+    },
+    "check_matlab_version":false,
+    "check_app_update":false,   
+    "fieldtrip":{
+        "description":"FieldTrip Toolbox",
+        "base_path":"D:/Tools/fieldtrip-master"
+    },
+    "brainstorm":{
+        "description":"Brainstorm Toolbox",
+        "base_path":"D:/Tools/brainstorm3"
+    },
+    "bst_protocols":{
+        "description":"Brainstorm protocols path",
+        "base_path":"E:/Data/Conectome/BST_Protocols"
+    },
+    "preprocessed_data":{
+        "description":"Preprocessed data path",
+        "base_path":"E:/Data/Conectome/HCP_data"
+    },
+    "output_path":{
+        "description":"Output path",
+        "base_path":"E:/Data/Conectome/Concurrency_Output"
+    }
+
+}
