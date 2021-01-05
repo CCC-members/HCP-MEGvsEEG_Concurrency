@@ -30,10 +30,10 @@ visited = false(n,1);
 %use priority queue for fast ordering and lookup of minimal distance
 root_path = pwd;
 folder=strsplit(pwd,'TrafficToolBox');
-folder=strcat(folder{1},'/TrafficToolBox');
+folder=fullfile(folder{1},'TrafficToolBox');
 cd(folder);
 
-javaclasspath('Code/Matlab Code/Dynamic Traffic Assignment');
+javaclasspath(fullfile('Code','Matlab Code','Dynamic Traffic Assignment'));
 comp = javaObject('PairComparator');
 nodesQueue = java.util.PriorityQueue(max(10,ceil(n/10)),comp);
 
