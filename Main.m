@@ -47,10 +47,10 @@ end
 if(~isfolder(paths.brainstorm_path))
    return; 
 end
-if(~isfolder(paths.bst_protocols))
+if(~isfolder(paths.protocols_path))
    return; 
 end
-if(~isfolder(paths.preprocessed_data))
+if(~isfolder(paths.data_path))
    return; 
 end
 if(~isfolder(paths.output_path))
