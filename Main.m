@@ -58,22 +58,40 @@ if(~isfolder(paths.output_path))
 end
 addpath(paths.fieldtrip_path);
 
+%% initializing fieltrip default properties
 ft_defaults
 
+%% Getting subjects for analysis
 protocols = dir(paths.protocols_path);
-protocols(ismember( {protocols.name}, {'.', '..'})) = [];  %remove . and ..
-for i=1:length(protocols)
-   protocol = protocols(i);
-   disp(strcat("-->> Processing protocol: ", protocol.name))
-   subjects = dir(fullfile(protocol.folder,protocol.name,'anat'));
-   subjects(ismember( {subjects.name}, {'.', '..', '@default_subject'})) = [];  %remove . and ..
-   for j=1:length(subjects)-1-1
-      subject = subjects(j);
-      disp(strcat("-->> Processing subject: ", subject.name));
-      SubID = subject.name;      
-      eeg_meg_concurrency(fullfile(protocol.folder,protocol.name),paths,SubID)
-   end
-    disp('=================================================================')
+if(isequal(app_properties.bst_protocols.protocol_name,"none") || isempty(app_properties.bst_protocols.protocol_name) )    
+    protocols(ismember( {protocols.name}, {'.', '..'})) = [];  %remove . and ..
+else
+    protocols(~ismember( {protocols.name}, {app_properties.bst_protocols.protocol_name})) = []; 
+end
+if(~isempty(protocols))
+    for i=1:length(protocols)
+        protocol = protocols(i);
+        disp(strcat("-->> Processing protocol: ", protocol.name))
+        subjects = dir(fullfile(protocol.folder,protocol.name,'anat'));
+        if(isequal(app_properties.bst_protocols.template.subject_name,"none") || isempty(app_properties.bst_protocols.template.subject_name))            
+            subjects(ismember( {subjects.name}, {'.', '..', '@default_subject'})) = [];  %remove . and ..
+        else
+            subjects(~ismember( {subjects.name}, {app_properties.bst_protocols.template.subject_name})) = []; 
+        end
+        if(~isempty(subjects))
+            for j=1:length(subjects)
+                subject = subjects(j);
+                disp(strcat("-->> Processing subject: ", subject.name));
+                SubID = subject.name;
+                eeg_meg_concurrency(fullfile(protocol.folder,protocol.name),paths,SubID)
+            end
+            disp('=================================================================')
+        else
+            isp("-->> No subject available in the specific path.");
+        end
+    end
+else
+    disp("-->> No protocol available in the specific path.");
 end
 
 disp(strcat("<<-- Process finished -->>"));

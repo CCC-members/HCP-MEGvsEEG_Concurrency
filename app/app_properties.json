@@ -30,8 +30,14 @@
         "base_path":"D:/Tools/brainstorm3"
     },
     "bst_protocols":{
-        "description":"Brainstorm protocols path",
-        "base_path":"E:/Data/Conectome/BST_Protocols"
+        "description":"Brainstorm protocols configurations. Type the BST-Protocol nema in case that you want to process just one protocol",
+        "base_path":"E:/Data/Conectome/BST_Protocols",
+        "protocol_name":"HeadModel_MEG_HCP_0",
+        "template":{
+            "description":"Type on true if you want to use a Brainstorm Protocol Template for all the subjects. Specify the subject name of the BST_Protocol in case that the Template have more than one subject.",
+            "use_template":false,
+            "subject_name":"100307"
+        }
     },
     "preprocessed_data":{
         "description":"Preprocessed data path",

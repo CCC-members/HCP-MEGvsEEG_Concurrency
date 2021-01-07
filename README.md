@@ -1,4 +1,7 @@
 # HCP-MEGvsEEG_Concurrency
+
+Reference
+
 P. A. V.-S. Eduardo Gonzalez-Moreira, Deirel Paz-Linares, Ariosky Areces-Gonzalez, Ying Wang, Min Li, Thalia Harmony. 
 “Bottom-up control of leakage in spectral electrophysiological source imaging via structured sparse bayesian learning,” 2020. 
 doi: https://doi.org/10.1101/2020.02.25.964684.
